@@ -4,10 +4,10 @@ import DatePicker from "./DatePicker";
 import GeneralButton from "./GeneralButton.js";
 
 const FormContainer = styled.div`
-  width: 300px;
+  width: 240px;
   padding: 20px;
   background-color: #f0f0f0;
-  border-radius: 8px;
+  border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
@@ -51,7 +51,7 @@ const UploadButton = styled(GeneralButton)`
   border-radius: 4px;
   cursor: pointer;
   margin-bottom: 10px;
-  width: 250px;
+  width: 225px;
 `;
 
 const SubmitButton = styled(GeneralButton)`
