@@ -44,19 +44,19 @@ const CenteredContainer = styled.div`
   margin-top: 15px;
 `;
 
-const UploadButton = styled.button`
+const UploadButton = styled(GeneralButton)`
   background-color: #e0e0e0;
-  padding: 10px;
+  padding: 15px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   margin-bottom: 10px;
-  width: 200px;
+  width: 250px;
 `;
 
 const SubmitButton = styled(GeneralButton)`
   margin-top: 10px;
-  width: 200px;
+  width: 300px;
   display: ${(props) => (props.isCalendarOpen ? "none" : "block")};
 `;
 
