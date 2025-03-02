@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
-import Calendar from "react-calendar"; // You'll need to install this: npm install react-calendar
+import Calendar from "react-calendar";
 
 const DatePickerContainer = styled.div`
   position: relative;
@@ -22,7 +22,6 @@ const CalendarIcon = styled.span`
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
-  /* Replace with your calendar icon */
   &:after {
     content: "📅";
     font-size: 20px;
@@ -36,12 +35,12 @@ const CalendarDropdown = styled.div`
   z-index: 100;
 `;
 
-const DatePicker = () => {
+const DatePicker = ({ onChange, isCalendarOpen, setIsCalendarOpen }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
+    onChange(date);
     setIsCalendarOpen(false);
   };
 
