@@ -44,17 +44,19 @@ const Logo = styled.span`
 const EmblemContainer = styled.div`
   background-color: #e0e0e0;
   border-radius: 50%;
-  padding: 0.5rem;
+  padding: 0.7rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 3rem;
-  height: 3rem;
+  width: 3.5rem;
+  height: 3.5rem;
 `;
 
 const Emblem = styled.img`
   max-width: 100%;
   height: auto;
+  object-fit: cover;
+  border-radius:50%
 `;
 
 const RegisterButton = styled.button`
@@ -99,7 +101,7 @@ const NavBar = () => {
         <LogoContainer>
           <Logo>VROOMBLE</Logo>
           <EmblemContainer>
-            <Emblem src="/images/emblem.png" alt="Emblem" />
+            <Emblem src="/images/Vroomble_Logo.jpg" alt="Emblem"  />
           </EmblemContainer>
         </LogoContainer>
 
@@ -142,6 +144,9 @@ const NavBar = () => {
       )}
     </NavBarContainer>
   );
+
 };
+
+
 
 export default NavBar;

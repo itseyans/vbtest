@@ -59,7 +59,7 @@ const About: React.FC = () => {
     { name: "Francis Joseph Libres" },
     { name: "Juan Miguel Molina" },
     { name: "Hanz Ian Silva" },
-    { name: "" },
+    { name: "Bryan Anthony Al Shidhani" },
   ];
 
   return (
