@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import DatePicker from "./DatePicker";
+import DatePicker from "./SelectDate.js";
 import GeneralButton from "./GeneralButton.js";
 
 const FormContainer = styled.div`
