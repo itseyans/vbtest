@@ -3,66 +3,60 @@ import styled from "styled-components";
 
 const DropdownContainer = styled.div`
   position: relative;
-  width: 300px;
+  width: 280px;
 `;
 
 const DropdownButton = styled.button`
-  width: 100%;
-  padding: 6px 12px; /* Reduced padding to compensate for larger text */
-  font-size: 24px; /* Increased font size */
-  border: 3px solid #ccc;
+  width: 305px;
+  height: 55px;
+  padding: 20px;
+  font-size: 20px;
+  font-weight: semi-bold;
+  border: 2px solid black;
   border-radius: 12px;
   background: white;
   cursor: pointer;
-  text-align: left;
+  text-align: center;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  min-width: 0;
   box-sizing: border-box;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  color: #000000;
 
   &:hover {
-    border-color: #999;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: #f0f0f0;
   }
 
   &:focus {
-    border-color: #666;
-    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.4);
+    border-color: #000;
     outline: none;
   }
 `;
-
-
 
 const DropdownList = styled.ul`
   position: absolute;
   width: 100%;
   background: white;
-  border: 3px solid #ccc; /* Match the 3px thickness */
+  border: 2px solid #ccc;
   border-radius: 12px;
   margin-top: 5px;
-  max-height: 200px;
+  max-height: 250px;
   overflow-y: auto;
-  overflow-x: hidden; /* Prevent horizontal scrolling */
   list-style: none;
   padding: 0;
   z-index: 10;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15);
+  color: #000000;
 `;
 
 const DropdownItem = styled.li`
-  padding: 10px;
-  text-align: left; /* Left-align text */
+  padding: 12px;
+  text-align: left;
   cursor: pointer;
-  border-radius: 12px; /* Rounded corners */
-  max-width: 100%; /* Prevent text overflow */
-  overflow-x: hidden; /* Hide any horizontal overflow */
+  border-radius: 12px;
+  max-width: 100%;
+  overflow-x: hidden;
 
   &:hover {
     background: #ffc629;
@@ -71,12 +65,12 @@ const DropdownItem = styled.li`
 
 const SearchInput = styled.input`
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   border: none;
   border-bottom: 1px solid #ccc;
-  font-size: 16px;
-  border-radius: 12px; /* Rounded corners */
-  box-sizing: border-box; /* Ensure padding doesn't increase width */
+  font-size: 18px;
+  border-radius: 12px;
+  box-sizing: border-box;
 
   &:focus {
     outline: none;
@@ -84,46 +78,64 @@ const SearchInput = styled.input`
   }
 `;
 
-const VehicleDropdown = () => {
+const VehicleDropdown = ({ onSelect }) => {
   const [vehicles, setVehicles] = useState([]);
   const [filteredVehicles, setFilteredVehicles] = useState([]);
   const [selectedVehicle, setSelectedVehicle] = useState("SELECT VEHICLE");
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Simulated API call to fetch vehicles from a database
   useEffect(() => {
     const fetchVehicles = async () => {
-      const data = [
-        "TOYOTA VIOS",
-        "FORTUNER",
-        "FORD RAPTOR",
-        "FERRARI SF90",
-        "LAMBORGHINI HURACAN",
-        "MAZDA MIATA",
-        "TOYOTA SUPRA",
-        "TOYOTA 86",
-        "SUBARU BRZ",
-      ];
-      setVehicles(data);
-      setFilteredVehicles(data); // Initialize filtered list
+      try {
+        const url = searchTerm
+          ? `http://localhost:8002/api/vehicles?q=${searchTerm}`
+          : "http://localhost:8002/api/vehicles";
+
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Failed to fetch vehicles");
+
+        const data = await response.json();
+        setVehicles(data);
+        setFilteredVehicles(data);
+      } catch (error) {
+        console.error("❌ Error fetching vehicles:", error);
+        setVehicles([]);
+      }
     };
 
     fetchVehicles();
-  }, []);
+  }, [searchTerm]);
 
-  // Handle search input
   const handleSearch = (e) => {
     const value = e.target.value.toUpperCase();
     setSearchTerm(value);
-    setFilteredVehicles(vehicles.filter((vehicle) => vehicle.includes(value)));
+    setFilteredVehicles(
+      vehicles.filter(
+        (vehicle) =>
+          vehicle.make.toUpperCase().includes(value) ||
+          vehicle.model.toUpperCase().includes(value) ||
+          (vehicle.variant && vehicle.variant.toUpperCase().includes(value)) ||
+          vehicle.drivetrain.toUpperCase().includes(value) ||
+          vehicle.year.toString().includes(value)
+      )
+    );
   };
 
-  // Handle selecting a vehicle
   const handleSelect = (vehicle) => {
-    setSelectedVehicle(vehicle);
+    const formattedVehicle = `${vehicle.make} ${vehicle.model} (${
+      vehicle.variant || "N/A"
+    }) - ${vehicle.drivetrain} - ${vehicle.year}`;
+    setSelectedVehicle(formattedVehicle);
+    console.log("🚗 Selected Vehicle:", vehicle);
+    console.log("🚗 Selected Vehicle carID:", vehicle.carID, typeof vehicle.carID);
     setIsOpen(false);
     setSearchTerm("");
+
+    if (onSelect) {
+      console.log("📡 Sending carID to Parent Component:", vehicle.carID);
+      onSelect(vehicle); // Pass the entire vehicle object.
+    }
   };
 
   return (
@@ -141,9 +153,9 @@ const VehicleDropdown = () => {
             onChange={handleSearch}
           />
           {filteredVehicles.length > 0 ? (
-            filteredVehicles.map((vehicle, index) => (
-              <DropdownItem key={index} onClick={() => handleSelect(vehicle)}>
-                {vehicle}
+            filteredVehicles.map((vehicle) => (
+              <DropdownItem key={vehicle.carID} onClick={() => handleSelect(vehicle)}> {/* Added key prop here using vehicle.carID */}
+                {vehicle.make} {vehicle.model} ({vehicle.variant || "N/A"}) - {vehicle.drivetrain} - {vehicle.year}
               </DropdownItem>
             ))
           ) : (

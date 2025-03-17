@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Button from "/public/SignButton.js"; // Ensure this is the correct path
+import Button from "./SignButton.js";
 
 const FormContainer = styled.div`
   width: 660px;
@@ -16,6 +16,8 @@ const FormContainer = styled.div`
 `;
 
 const Title = styled.h2`
+  color: black;
+  font-weight: bold;
   text-align: center;
   margin-bottom: 20px;
 `;
@@ -29,6 +31,7 @@ const InputGroup = styled.div`
 `;
 
 const StyledLabel = styled.label`
+  color: black;
   font-weight: bold;
   align-self: flex-start;
   margin-left: 30px;
@@ -36,13 +39,14 @@ const StyledLabel = styled.label`
 `;
 
 const LInput = styled.input`
+  color: black;
   padding: 10px;
   margin-top: 5px;
   margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 12px;
   font-size: 16px;
-  width: 300px; /* Fixed width */
+  width: 300px;
   box-sizing: border-box;
 
   &:focus {
@@ -80,8 +84,7 @@ function RegistrationForm() {
   const validateForm = () => {
     let newErrors = {};
 
-    if (!formData.firstName.trim())
-      newErrors.firstName = "First Name is required";
+    if (!formData.firstName.trim()) newErrors.firstName = "First Name is required";
     if (!formData.lastName.trim()) newErrors.lastName = "Last Name is required";
     if (!formData.contactNumber.trim())
       newErrors.contactNumber = "Contact Number is required";
@@ -94,11 +97,30 @@ function RegistrationForm() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      alert("Registration Successful!");
-      console.log("User Data:", formData);
+      try {
+        const { confirmPassword, ...dataToSend } = formData;
+        const response = await fetch("http://localhost:8001/register/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dataToSend),
+        });
+
+        if (response.ok) {
+          alert("Registration Successful!");
+          console.log("User Data:", formData);
+        } else {
+          const errorData = await response.json();
+          alert(`Registration failed: ${errorData.error || "Unknown error"}`);
+        }
+      } catch (error) {
+        console.error("Error during registration:", error);
+        alert("An error occurred during registration.");
+      }
     }
   };
 

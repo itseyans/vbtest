@@ -5,7 +5,7 @@ const vehicles = [
     id: 1,
     name: "Car 1",
     image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/BMW_330i_G20_IMG_0083.jpg/800px-BMW_330i_G20_IMG_0083.jpg", 
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/BMW_330i_G20_IMG_0083.jpg/800px-BMW_330i_G20_IMG_0083.jpg",
   },
   {
     id: 2,
@@ -80,14 +80,6 @@ const ListedVehicleViewing = () => {
           ))}
         </div>
       </div>
-
-      {/* Footer */}
-      <div
-        style={{
-          backgroundColor: "#222",
-          height: "20px",
-        }}
-      ></div>
     </div>
   );
 };
